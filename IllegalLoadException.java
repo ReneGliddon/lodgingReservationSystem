@@ -1,3 +1,5 @@
+package lodgingapp;
+
 
 public class IllegalLoadException extends RuntimeException {
 	

@@ -1,3 +1,5 @@
+package lodgingapp;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -191,14 +193,14 @@ public class HotelReservation extends Reservation {
     public void setReservationStatus(String newStatus) {
     	  
     	//check the status is valid
-    	if(newStatus.toLowerCase() == "draft" || newStatus.toLowerCase() == "completed" || newStatus.toLowerCase() == "cancelled") {
+    	if(newStatus.toLowerCase().equals("draft") || newStatus.toLowerCase().equals("completed") || newStatus.toLowerCase().equals("cancelled")) {
     		
     		//check the date if the new status is "cancelled"
-    		if(newStatus.toLowerCase() == "cancelled") {
+    		if(newStatus.toLowerCase().equals("cancelled")) {
     			
     			//current date
     			Date now = new Date(System.currentTimeMillis());
-    			System.out.println("The surrent date is "+ now);
+    			
     			//format the reservation date
     			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     			
@@ -238,7 +240,7 @@ public class HotelReservation extends Reservation {
     		}
  
     		//if reservation is completed, set the price
-    		if(this.reservationStatus.toLowerCase() == "completed") {
+    		if(this.reservationStatus.toLowerCase().equals("completed")) {
     		
     			//first calculate the price
     			double thePrice = calculateReservationPrice();
@@ -294,33 +296,25 @@ public class HotelReservation extends Reservation {
        return hotelReservation;
     }
     
+    //toString() method will output the class’s data to the screen and return formatted data 
+    public String toStringQuiet() {
+
+    	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    	
+        //format data
+   	 	String hotelReservation =  "<hotelReservation>" +
+                super.toString() +
+                		"<startDate>" + formatter.format(startDate) + "</startDate>" +
+               	        "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" +
+               	        "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
+               	        "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" +
+               	        "<kitchenette>" + kitchenette + "</kitchenette>" +
+               	        "</hotelReservation>" ;      
     
-    //todo: add file writing  method to simplify other methods
-    // save the object data to the provided file
-   /* public void saveToFile(String fileName, String writeThis) throws Exception
-    {
-    	PrintWriter out = null;
-        try
-        {
-	        
-        	System.out.println(fileName);
-        	// create/override a file given the fileName
-	        out = new PrintWriter(fileName);
-	        
-	        // write out the trip level information using the xml format
-	        out.println(writeThis);
-	        
-	        // close the file
-	        out.close();
-        }
-        catch (Exception e)  // caught an error so can close file
-        {
-            System.out.println("Error " + e.getMessage());
-            if (out != null)
-            	out.close();  // close file
-            throw e;  // to let UI know there is an issue
-        }
-    }*/
+       //return the String
+       
+       return hotelReservation;
+    }
     
     //create and return a copy of the object
     public HotelReservation clone() {
@@ -340,3 +334,4 @@ public class HotelReservation extends Reservation {
 
     
 }
+
