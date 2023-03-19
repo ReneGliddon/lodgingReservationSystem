@@ -1,3 +1,5 @@
+package lodgingapp;
+
 import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -234,6 +236,7 @@ public abstract class Reservation {
     //reservation status (draft, completed, or cancelled)
     protected String reservationStatus;
 
+    private Date startDate;
     // Methods
     
     //get methods
@@ -423,7 +426,7 @@ public abstract class Reservation {
     public void setPrice(double newPrice) {
     	
     	//check if the reservation has been completed
-    	if(this.reservationStatus.toLowerCase() == "completed") {
+    	if(this.reservationStatus.toLowerCase().equals("completed") ){
     		
     		this.price = newPrice;
     	}
@@ -434,7 +437,7 @@ public abstract class Reservation {
     }
     
     //abstract method to create and return a copy of the object
-    abstract public Reservation clone();
+   // abstract public Reservation clone();
 
     // toString() method will output the class’s formatted data to the screen, and return it. 
     public String toString() {
@@ -453,6 +456,27 @@ public abstract class Reservation {
    	 	
    	 		// Output the Address object's data to the screen as formatted data
    	 		System.out.println(reservation);   
+  
+       
+       //return the address as a String
+        return reservation;
+    	
+    }
+    
+    // toString() method will return the data without outputting it
+    public String toStringQuiet() {
+    	
+    	//format the data    
+   	 		String reservation = "<reservation>" +
+   	 				"<accountNumber>" + accountNumber + "</accountNumber>" +
+   	 				"<reservationNumber>" + reservationNumber + "</reservationNumber>" +
+   	 				"<lodgingPhysicalAddress>" + lodgingPhysicalAddress + "</lodgingPhysicalAddress>" +
+   	 				"<lodgingMailingAddress>" + lodgingMailingAddress+ "</lodgingMailingAddress>" +
+   	 				"<numberOfNights>" + numberOfNights + "</numberOfNights>" +
+   	 				"<lodgingSizeInSqFeet>" + lodgingSizeInSqFeet + "</lodgingSizeInSqFeet>" +
+   	 				"<price>" + price + "</price>" +
+   	 				"<reservationStatus>" + reservationStatus + "</reservationStatus>" +
+   	 				"</reservation>";
   
        
        //return the address as a String

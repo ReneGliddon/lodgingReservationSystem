@@ -1,3 +1,5 @@
+package lodgingapp;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -252,7 +254,9 @@ public class CabinReservation extends Reservation {
      {
     	 
      	super(line);  
-
+     	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        
+    	startDate = formatter.parse(line.substring(line.indexOf("<startDate>") + 11, line.indexOf("</startDate>")));
      	numberOfBeds = Integer.parseInt(line.substring(line.indexOf("<numberOfBeds>") + 14, line.indexOf("</numberOfBeds>")));
      	numberOfBedrooms = Integer.parseInt(line.substring(line.indexOf("<numberOfBedrooms>") + 18, line.indexOf("</numberOfBedrooms>")));
      	numberOfBathrooms = Integer.parseInt(line.substring(line.indexOf("<numberOfBathrooms>") + 19, line.indexOf("</numberOfBathrooms>")));   
@@ -329,14 +333,14 @@ public class CabinReservation extends Reservation {
 
     	  
     	//check the status is valid
-    	if(newStatus.toLowerCase() == "draft" || newStatus.toLowerCase() == "completed" || newStatus.toLowerCase() == "cancelled") {
+    	if(newStatus.toLowerCase().equals("draft") || newStatus.toLowerCase().equals("completed") || newStatus.toLowerCase().equals("cancelled")) {
     		
     		//check the date if the new status is "cancelled"
-    		if(newStatus.toLowerCase() == "cancelled") {
+    		if(newStatus.toLowerCase().equals("cancelled")) {
     			
     			//current date
     			Date now = new Date(System.currentTimeMillis());
-    			System.out.println("The surrent date is "+ now);
+    			//System.out.println("The surrent date is "+ now);
     			//format the reservation date
     			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     			
@@ -357,6 +361,8 @@ public class CabinReservation extends Reservation {
 						if(beginDate.after(now)) {
 								//if the reservation is in the future, change the status to "cancelled"
 								this.reservationStatus = newStatus;
+								//rewrite the file
+								
 						}
 						//if the reservation date is  in the past, or today, then do not cancel it, but rather send an error message
 						else {
@@ -376,13 +382,15 @@ public class CabinReservation extends Reservation {
     		}
  
     		//if reservation is completed, set the price
-    		if(this.reservationStatus.toLowerCase() == "completed") {
+    		if(this.reservationStatus.toLowerCase().equals("completed")) {
     		
     			//first calculate the price
     			double thePrice = calculateReservationPrice();
     		
     			//set the price
     			setPrice(thePrice);
+    			
+    			
     		}//end if the new status is completed
     	}
    }//end setReservationStatus
@@ -414,17 +422,17 @@ public class CabinReservation extends Reservation {
     
      //toString() method will output the class’s formatted data to the screen, as well as return it.  
   public String toString() {
-
-    	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-    	
-        //Format the data
-    	String cabinReservation =  "<cabinReservation>" +   super.toString() +  
-    	 "<startDate>" + formatter.format(startDate )+ "</startDate>" +
-          "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" + 
-    	  "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
-          "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" + 
-    	  "<fullKitchen>" + fullKitchen + "</fullKitchen>" +
-          "<loft>" + loft + "</loft>" + "</cabinReservation>";
+	  SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+  	
+      //format data
+ 	 	String cabinReservation =  "<cabinReservation>" +
+              super.toString() +
+              		"<startDate>" + formatter.format(startDate) + "</startDate>" +
+             	        "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" +
+             	        "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
+             	        "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" +
+             	       "<fullKitchen>" + fullKitchen + "</fullKitchen>" +
+             	      "<loft>" + loft + "</loft>" + "</cabinReservation>";
     	
         // Output the class's data to the screen as formatted data
         System.out.println(cabinReservation);
@@ -434,31 +442,25 @@ public class CabinReservation extends Reservation {
        return cabinReservation;
        
     }//end toString() 
+
+  //toString() method will return the data without printing it to the screen.  
+public String toStringQuiet() {
+	  SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+	
+   //format data
+	 	String cabinReservation =  "<cabinReservation>" +
+           super.toString() +
+           		"<startDate>" + formatter.format(startDate) + "</startDate>" +
+          	        "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" +
+          	        "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
+          	        "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" +
+          	       "<fullKitchen>" + fullKitchen + "</fullKitchen>" +
+          	      "<loft>" + loft + "</loft>" + "</cabinReservation>";
+   
+    //return the String
+    return cabinReservation;
     
-    // TODO:write a method to write to a file to simplify other code save the object data to the provided file
-  /*  public void saveToFile(String fileName, String writeThis) throws Exception
-    {
-    	System.out.println("saving to a file");
-    	PrintWriter out = null;
-        try
-        {
-	        // create/override a file given the fileName
-	        out = new PrintWriter(fileName);
-	        
-	        // write out the trip level information using the xml format
-	        out.println(writeThis);
-	        
-	        // close the file
-	        out.close();
-        }
-        catch (Exception e)  // caught an error so can close file
-        {
-            System.out.println("Error " + e.getMessage());
-            if (out != null)
-            	out.close();  // close file
-            throw e;  // to let UI know there is an issue
-        }
-    }*/
+ }//end toString() 
     
     //create and return a copy of the object
     public CabinReservation clone() {

@@ -1,3 +1,4 @@
+package lodgingapp;
 
 import java.io.*;
 import java.util.*;
@@ -40,10 +41,24 @@ public class Address {
    	 	return address;
    
    }//end toString
-    
-    //Constructor with a string  line
-    public Address(String line) {
-    	
+   
+   //toStringQuiet() method will return the data without outputting it. 
+  public String toStringQuiet() {
+  	
+  		//format data
+  	 	String address = "<address>" +
+  	 			"<street>" + street + "</street>" +
+  	 			"<city>" + city + "</city>" +
+  	 			"<state>" + state + "</state>" +
+  	 			"<zip>" + zip + "</zip>" +
+  	 			"</address>";
+     
+  	 	//return the address as a String
+  	 	return address;
+  
+  }//end toString
+
+     public Address(String line) {
     	//parse the line and set values
     	 street = line.substring(line.indexOf("<street>") + 8, line.indexOf("</street>"));
          city = line.substring(line.indexOf("<city>") + 6, line.indexOf("</city>"));
@@ -53,9 +68,10 @@ public class Address {
          if (street == null || city == null || state == null || zip == null
                  || street.length() == 0 || city.length() == 0 || state.length() == 0 || zip.length() == 0)
              throw new IllegalArgumentException("Parameter values cannot be null or empty strings");
-    }
+    	 
+	}
 
-     // Name of the street
+	// Name of the street
     private String street;
 
     //Name of the city

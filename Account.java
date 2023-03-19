@@ -1,10 +1,8 @@
+package lodgingapp;
 
 import java.io.*;
 import java.util.*;
 
-/**
- * 
- */
 public class Account {
 
     
@@ -150,14 +148,14 @@ public class Account {
     public void setEmailAddress(String newEmail) {
     	
     	//check the format of the email address
-    	int end = newEmail.length() - 1;
-    	int start = end - 3;
+    	int end = newEmail.length();
+    	int start = end - 4;
     	int atIndex = newEmail.indexOf('@');
     	Boolean at = newEmail.contains("@");
     	
     	String email = newEmail.substring(start, end);
     	
-    	if(email == ".com" && at == true && atIndex < start) {
+    	if(email.equals(".com") && at.equals(true) && atIndex < start) {
     	
     		this.emailAddress = newEmail;
     	}

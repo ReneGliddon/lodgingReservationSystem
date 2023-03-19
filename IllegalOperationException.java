@@ -1,3 +1,5 @@
+package lodgingapp;
+
 
 public class IllegalOperationException extends RuntimeException{
 
@@ -34,7 +36,7 @@ public class IllegalOperationException extends RuntimeException{
 		super();
 		
 			//res number
-			String number = fileName.substring(3,fileName.length());
+			//String number = fileName.substring(3,fileName.length());
 			
 			//account number
 			//String account = filename.substring(0)
@@ -46,7 +48,7 @@ public class IllegalOperationException extends RuntimeException{
 			this.message = "Failed to complete reservation " + fileName + " because " + reason + ".";
 		}
 		else {
-			this.message = "Failed to "+ operation + " file "+ number + " because " + reason + ".";
+			this.message = "Failed to "+ operation + " file "+ fileName + " because " + reason + ".";
 		}		
 		
 	}

@@ -1,3 +1,5 @@
+package lodgingapp;
+
 
 public class DuplicateObjectException extends RuntimeException {
 		

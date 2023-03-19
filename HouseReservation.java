@@ -1,3 +1,5 @@
+package lodgingapp;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -238,7 +240,9 @@ public class HouseReservation extends Reservation {
    public HouseReservation(String line) throws ParseException
    {
    	super(line);     
-
+   	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    
+	startDate = formatter.parse(line.substring(line.indexOf("<startDate>") + 11, line.indexOf("</startDate>")));
    	numberOfFloors  = Integer.parseInt(line.substring(line.indexOf("<numberOfFloors>") + 16, line.indexOf("</numberOfFloors")));    
    	numberOfBeds = Integer.parseInt(line.substring(line.indexOf("<numberOfBeds>") + 14, line.indexOf("</numberOfBeds>")));
    	numberOfBedrooms = Integer.parseInt(line.substring(line.indexOf("<numberOfBedrooms>") + 18, line.indexOf("</numberOfBedrooms>")));
@@ -275,13 +279,12 @@ public class HouseReservation extends Reservation {
     
   //set reservation status
     public void setReservationStatus(String newStatus) {
-   
-    	  
+
     	//check the status is valid
-    	if(newStatus.toLowerCase() == "draft" || newStatus.toLowerCase() == "completed" || newStatus.toLowerCase() == "cancelled") {
-    		
+    	if(newStatus.toLowerCase().equals("draft") || newStatus.toLowerCase().equals("completed") || newStatus.toLowerCase().equals("cancelled")) {
+ 
     		//check the date if the new status is "cancelled"
-    		if(newStatus.toLowerCase() == "cancelled") {
+    		if(newStatus.toLowerCase().equals("cancelled")) {
     			
     			//current date
     			Date now = new Date(System.currentTimeMillis());
@@ -323,11 +326,10 @@ public class HouseReservation extends Reservation {
     		}
  
     		//if reservation is completed, set the price
-    		if(this.reservationStatus.toLowerCase() == "completed") {
-    		
+    		if(this.reservationStatus.toLowerCase().equals("completed")) {
+    			
     			//first calculate the price
     			double thePrice = calculateReservationPrice();
-    		
     			//set the price
     			setPrice(thePrice);
     		}//end if the new status is completed
@@ -339,8 +341,7 @@ public class HouseReservation extends Reservation {
     	
     	//Basic price is $120 with an additional fee of $15 if the lodging size is greater than 900 square feet.
     	double newPriceCalculation = super.calculateReservationPrice();
-    	
-    	
+    
     	return newPriceCalculation; 
     }
        
@@ -365,18 +366,18 @@ public class HouseReservation extends Reservation {
     
     // toString() method will output the class’s data to the screen and return formatted data 
     public String toString()  {
-    	//format data
+    	
     	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     	
-    	 String houseReservation =  "<houseReservation>" +
-                 super.toString() + 
-                 "<startDate>" + formatter.format(startDate )+ "</startDate>" +
-                 "<numberOfFloors>" + numberOfFloors + "</numberOfFloors>" +
-                 "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" +
-                 "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
-                 "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" +
-                 "</houseReservation>";                	   	 	
-
+        //format data
+   	 	String houseReservation =  "<houseReservation>" +
+                super.toString() +
+                		"<startDate>" + formatter.format(startDate) + "</startDate>" +
+               	        "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" +
+               	        "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
+               	        "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" +
+               	        "<numberOfFloors>" + numberOfFloors + "</numberOfFloors>" +
+               	        "</houseReservation>" ;                	   	 	
         // Output the class's data to the screen as formatted data
     	 System.out.println(houseReservation);
     	 
@@ -384,39 +385,32 @@ public class HouseReservation extends Reservation {
         return houseReservation;
     }
     
- 
-    //TODO create file writing methods to simplify the other methods
-    // save the object data to the provided file
-  /*  public void saveToFile(String fileName, String writeThis) throws Exception
-    {
-    	PrintWriter out = null;
-        try
-        {
-	        // create/override a file given the fileName
-	        out = new PrintWriter(fileName);
-	        
-	        // write out the trip level information using the xml format
-	        out.println(writeThis);
-	        
-	        // close the file
-	        out.close();
-        }
-        catch (Exception e)  // caught an error so can close file
-        {
-            System.out.println("Error " + e.getMessage());
-            if (out != null)
-            	out.close();  // close file
-            throw e;  // to let UI know there is an issue
-        }
-    }*/
+    // toString() method will return formatted data without outputting it to the screen 
+    public String toStringQuiet()  {
+    	
+    	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    	
+        //format data
+   	 	String houseReservation =  "<houseReservation>" +
+                super.toString() +
+                		"<startDate>" + formatter.format(startDate) + "</startDate>" +
+               	        "<numberOfBeds>" + numberOfBeds + "</numberOfBeds>" +
+               	        "<numberOfBedrooms>" + numberOfBedrooms + "</numberOfBedrooms>" +
+               	        "<numberOfBathrooms>" + numberOfBathrooms + "</numberOfBathrooms>" +
+               	        "<numberOfFloors>" + numberOfFloors + "</numberOfFloors>" +
+               	        "</houseReservation>" ;                	   	 	
+   	 
+        
+        return houseReservation;
+    }
     
    //create and return a copy of the object
-   public HouseReservation clone() {
+   public HouseReservation clone(HouseReservation reservation) {
 	   
 	   //create a new object with copied attributes	
-	   HouseReservation newHouseRes = new HouseReservation(this.accountNumber, this.reservationNumber, this.lodgingPhysicalAddress, 
-			   							this.lodgingMailingAddress, this.numberOfNights, this.lodgingSizeInSqFeet, this.price, this.reservationStatus, this.startDate, this.numberOfFloors,
-			   							this.numberOfBeds, this.numberOfBedrooms, this.numberOfBathrooms);
+	   HouseReservation newHouseRes = new HouseReservation(reservation.accountNumber, reservation.reservationNumber, reservation.lodgingPhysicalAddress, 
+			   reservation.lodgingMailingAddress, reservation.numberOfNights, reservation.lodgingSizeInSqFeet, reservation.price, reservation.reservationStatus, reservation.startDate, reservation.numberOfFloors,
+			   reservation.numberOfBeds, this.numberOfBedrooms, this.numberOfBathrooms);
 	   //return new object
 	   return newHouseRes;
    }
